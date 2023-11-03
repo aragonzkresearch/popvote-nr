@@ -272,7 +272,7 @@ contract POPVote
     )
     {
         // Check whether we are still in the voting period
-        let selector = compute_selector("_voting_period_check((Field))");
+        let selector = compute_selector("_voting_period_check(Field)");
         let is_ongoing = context.call_public_function(context.this_address(), selector, [process_id]);
         
         let signed_id = Signature
@@ -349,7 +349,7 @@ contract POPVote
         context.call_public_function(context.this_address(), selector, [process_id, nft_storage_root_fields[0], nft_storage_root_fields[1], zk_registry_storage_root_fields[0], tlcs_pk[0], tlcs_pk[1]]);        
         
         // Commit to public storage
-        let selector = compute_selector("_commit_nullifier_and_vote(Field, Field, Field, Field,, Field)");
+        let selector = compute_selector("_commit_nullifier_and_vote(Field,Field,Field,Field,Field)");
         context.call_public_function(context.this_address(), selector, [process_id, n, a[0], a[1], b]);        
     }
 
@@ -405,6 +405,8 @@ contract POPVote
             // ...and publish them on L1.
             let vp = storage.voting_process.at(process_id).read();
             let result_hash = hash_results(process_id, vp.ipfs_hash, vp.start_time, vp.census_block, vp.block_hash, vp.duration, vp.tlcs_round_number, [vp.tlcs_pk.x, vp.tlcs_pk.y], [outcome.no, outcome.yes, outcome.abstain]);
+
+            context.message_portal(result_hash);
         }
     }    
 }
