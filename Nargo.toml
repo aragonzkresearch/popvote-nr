@@ -1,0 +1,16 @@
+[package]
+name = "popvote"
+type = "contract"
+authors = [""]
+compiler_version = "0.17.0"
+
+[dependencies]
+# Framework import
+aztec = { git="https://github.com/AztecProtocol/aztec-packages/", tag="aztec-packages-v0.13.1", directory="yarn-project/aztec-nr/aztec" }
+
+# Utility dependencies
+value_note = { git="https://github.com/AztecProtocol/aztec-packages/", tag="aztec-packages-v0.13.1", directory="yarn-project/aztec-nr/value-note"}
+safe_math = { git="https://github.com/AztecProtocol/aztec-packages/", tag="aztec-packages-v0.13.1", directory="yarn-project/aztec-nr/safe-math"}
+
+# Computational dependencies
+noir_trie_proofs = { path = "../noir-trie-proofs/lib"}
