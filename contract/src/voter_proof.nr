@@ -70,17 +70,34 @@ pub fn verify_vote<MAX_PROOF_SIZE>(vote: VoteProverInput<MAX_PROOF_SIZE>)
     // Check registration by verifying x coordinate of public key
     let address_in_bytes = vote.voter_address.to_be_bytes(20);
     let calculated_registry_key = {
-        let mut buf = [0; 64]; // key ++ storage_slot
-        let mut out = keccak256(buf, 64);
-
+        let mut buf = [0; 64]; // Buffer
+        // Compute storage slot of pk[address], which is keccak256(bytes32(address) ++ slot_number)
+        let slot_number = 0;
+        let slot_number_bytes = slot_number.to_be_bytes(32);
+        
         for i in 0..20
         {
-            buf[i + 12] = address_in_bytes[i];
+            buf[12 + i] = address_in_bytes[i];
         }
 
         for i in 0..32
         {
-            buf[i + 32] = out[i];
+            buf[32 + i] = slot_number_bytes[i];
+        }
+
+        // Hash
+        let out = keccak256(buf, 64);
+
+        // Now compute the storage slot of pk[address][bjj_code], which is keccak256(uint256(bjj_code) ++ slot(pk[address])),
+        // where bjj_code is some integer that stands for 'Baby Jubjub'.
+        let bjj_code = 0; // Subject to change
+        let bjj_code_bytes = bjj_code.to_be_bytes(32);
+
+        // Populate buffer
+        for i in 0..32
+        {
+            buf[i] = bjj_code_bytes[i];
+            buf[32 + i] = out[i];
         }
 
         keccak256(buf, 64)
@@ -102,8 +119,10 @@ pub fn verify_vote<MAX_PROOF_SIZE>(vote: VoteProverInput<MAX_PROOF_SIZE>)
     // Check NFT ownership
     let calculated_nft_key = {
         let mut buf = [0; 64];
-        
-        buf[63] = 3;
+        // Compute storage slot of _ownerOf[nft_id], which is keccak256(bytes32(nft_id) ++ slot_number)
+        let slot_number = 2;
+        let slot_number_bytes = slot_number.to_be_bytes(32);
+
         let nft_id_bytes1 = vote.nft_id[0].to_be_bytes(16);
         let nft_id_bytes2 = vote.nft_id[1].to_be_bytes(16);
         
@@ -111,6 +130,11 @@ pub fn verify_vote<MAX_PROOF_SIZE>(vote: VoteProverInput<MAX_PROOF_SIZE>)
         {
             buf[i] = nft_id_bytes1[i];
             buf[16 + i] = nft_id_bytes2[i];
+        }
+
+        for i in 0..32
+        {
+            buf[32 + i] = slot_number_bytes[i];
         }
 
         keccak256(buf, 64)

@@ -404,7 +404,7 @@ contract POPVote
 
             // ...and publish them on L1.
             let vp = storage.voting_process.at(process_id).read();
-            let result_hash = hash_results(process_id, vp.ipfs_hash, vp.start_time, vp.census_block, vp.block_hash, vp.duration, vp.tlcs_round_number, [vp.tlcs_pk.x, vp.tlcs_pk.y], [outcome.no, outcome.yes, outcome.abstain]);
+            let result_hash = hash_results(process_id, vp.ipfs_hash, vp.start_time, vp.census_block, vp.block_hash, vp.duration, vp.tlcs_round_number, [vp.tlcs_pk.x, vp.tlcs_pk.y], num_voters, [outcome.no, outcome.yes, outcome.abstain]);
 
             context.message_portal(result_hash);
         }
