@@ -1,0 +1,6 @@
+[submodule "ethereum_contract/lib/solmate"]
+	path = ethereum_contract/lib/solmate
+	url = https://github.com/transmissions11/solmate
+[submodule "ethereum_contract/lib/aztec-packages"]
+	path = ethereum_contract/lib/aztec-packages
+	url = https://github.com/AztecProtocol/aztec-packages
