@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPLv3
+// SPDX-License-Identifier: GNU GPLv3
 pragma solidity ^0.8.13;
 
 import "solmate/tokens/ERC721.sol";

@@ -13,8 +13,8 @@ contract ZKRegistry
     mapping(address => mapping(uint256 => uint256)) public pk;
 
     /// Function for key registration
-    function register(address a, uint256 curve, uint256 _pk) public
+    function register(uint256 curve, uint256 _pk) public
     {
-	pk[a][curve] = _pk;
+	pk[msg.sender][curve] = _pk;
     }
 }
